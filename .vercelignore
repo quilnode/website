@@ -9,6 +9,7 @@
 /.openai/*
 !/.openai/hosting.json
 !/index.html
+!/guide
 !/package.json
 !/package-lock.json
 !/vite.config.mjs

@@ -107,6 +107,7 @@ test("CLI uploads require an explicit source allowlist", async () => {
       "!/.openai/",
       "!/.openai/hosting.json",
       "!/index.html",
+      "!/guide",
       "!/package.json",
       "!/package-lock.json",
       "!/vite.config.mjs",

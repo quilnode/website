@@ -25,7 +25,7 @@ async function publicFiles(directory) {
 test("published files contain no internal documents, source maps, keys, or workstation paths", async () => {
   const files = await publicFiles(new URL("../dist/client/", import.meta.url));
   const allowed =
-    /^(?:index\.html|robots\.txt|sitemap\.xml|_headers|third-party-notices\.txt|assets\/[A-Za-z0-9_-]+\.(?:js|css|woff2)|images\/[A-Za-z0-9_-]+\.(?:png|svg))$/;
+    /^(?:(?:guide\/)?index\.html|robots\.txt|sitemap\.xml|_headers|third-party-notices\.txt|assets\/[A-Za-z0-9_-]+\.(?:js|css|woff2)|images\/[A-Za-z0-9_-]+\.(?:png|svg))$/;
   const privatePath = /\/(?:Users|home)\/[^\s/]+|[A-Z]:\\Users\\[^\s\\]+/;
   const credential =
     /-----BEGIN (?:[A-Z]+ )*PRIVATE KEY-----|\bgh[pousr]_[A-Za-z0-9]{36,}\b|\bgithub_pat_[A-Za-z0-9_]{40,}\b/;

@@ -24,6 +24,22 @@
 .brand:hover {
   text-decoration: none;
 }
+.header-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+}
+.source-link[aria-current="page"] {
+  color: var(--text);
+}
+.install-guide-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 4px;
+  font-size: 13px;
+}
 .brand img {
   display: block;
 }
@@ -146,6 +162,8 @@ h1 {
 @media (max-width: 700px) {
   .site-header {
     padding: 20px 24px;
+    flex-wrap: wrap;
+    gap: 8px 20px;
   }
   .brand {
     font-size: 21px;

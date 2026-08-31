@@ -1,6 +1,6 @@
 export default {
   fetch(request, env) {
-    // This is a single static page, not a client-side router. Preserve real 404s.
+    // Serve built HTML pages directly; preserve real 404s without an SPA fallback.
     return env.ASSETS.fetch(request);
   },
 };

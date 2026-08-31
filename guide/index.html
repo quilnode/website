@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Operator guide — QuilNode</title>
+    <meta
+      name="description"
+      content="Install QuilNode, understand macOS security prompts, and prepare a local Quilibrium node safely."
+    />
+    <meta name="theme-color" content="#02070d" />
+    <meta name="referrer" content="no-referrer" />
+    <link rel="icon" href="/images/quilnode-mark.svg" type="image/svg+xml" />
+    <link rel="canonical" href="https://quilnode.com/guide/" />
+    <meta property="og:title" content="Operator guide — QuilNode" />
+    <meta
+      property="og:description"
+      content="Practical installation, authorization, and node setup guidance. Know what each step changes before you approve it."
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://quilnode.com/guide/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Operator guide — QuilNode" />
+    <meta
+      name="twitter:description"
+      content="Practical installation, authorization, and node setup guidance."
+    />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="stylesheet" href="/src/styles/guide.css" />
+  </head>
+  <body>
+    <div class="site guide-site">
+      <a class="skip-link" href="#main">Skip to content</a>
+      <header class="site-header">
+        <a class="brand" href="/" aria-label="QuilNode home">
+          <img src="/images/quilnode-mark.svg" width="48" height="48" alt="" />
+          <span>QuilNode</span>
+        </a>
+        <nav class="header-links" aria-label="Main navigation">
+          <a class="source-link" href="/guide/" aria-current="page">Guide</a>
+          <a
+            class="source-link"
+            href="https://github.com/quilnode/quilnode"
+            rel="noreferrer"
+            >GitHub <span aria-hidden="true">↗</span></a
+          >
+        </nav>
+      </header>
+      <div class="guide-layout">
+        <nav class="guide-contents" aria-label="Guide contents">
+          <p>On this page</p>
+          <ol>
+            <li><a href="#before-you-start">Before you start</a></li>
+            <li><a href="#download-and-verify">Download &amp; verify</a></li>
+            <li><a href="#first-open">Install &amp; first open</a></li>
+            <li><a href="#node-setup">Set up your node</a></li>
+          </ol>
+        </nav>
+        <main id="main" class="guide-main" tabindex="-1">
+          <header class="guide-heading">
+            <p class="guide-eyebrow">Local software. Your control.</p>
+            <h1>Operator guide</h1>
+            <p>Know what each step changes before you approve it.</p>
+          </header>
+          <aside class="guide-notice" aria-label="Alpha software warning">
+            <h2>Alpha software — evaluate before use</h2>
+            <p>
+              Bugs, security issues, and breaking changes can cause downtime,
+              data loss, or missed rewards. Start with a disposable identity.
+              Keep independent, tested backups before adopting an important
+              node. Open source and valid signatures are not a guarantee of
+              safety.
+            </p>
+          </aside>
+
+          <section class="guide-section" aria-labelledby="before-you-start">
+            <h2 id="before-you-start">Before you start</h2>
+            <p>
+              QuilNode is the Mac management app. The Quilibrium node is a
+              separate background service; <code>qclient</code> is its
+              separately managed companion. Installing the app does not itself
+              install a node or create an identity.
+            </p>
+            <ul>
+              <li>
+                <strong>App compatibility:</strong> Apple Silicon and macOS 14
+                or later. Intel Macs, Windows, and Linux cannot run this app.
+              </li>
+              <li>
+                <strong>Node capacity:</strong> allow enough memory, SSD space,
+                and reliable connectivity for the workload. Check the
+                <a
+                  href="https://docs.quilibrium.com/docs/run-node/system-requirements/"
+                  rel="noreferrer"
+                  >current Quilibrium requirements</a
+                >; passing the app's initial checks is not a capacity guarantee.
+              </li>
+              <li>
+                <strong>Permissions:</strong> a macOS administrator approves
+                installation of the local service. Ordinary monitoring does not
+                need a password.
+              </li>
+              <li>
+                <strong>Tools:</strong> the signed-node installation path does
+                not need Xcode, Homebrew, Rust, or Cargo. Source-development
+                builds have separate toolchain requirements.
+              </li>
+            </ul>
+            <p>
+              Read the
+              <a
+                href="https://github.com/quilnode/quilnode/blob/main/SECURITY.md"
+                rel="noreferrer"
+                >security model</a
+              >
+              yourself or with a reviewer you trust. QuilNode is independent of,
+              and not endorsed or supported by, Quilibrium Inc. or the protocol
+              maintainers.
+            </p>
+          </section>
+
+          <section class="guide-section" aria-labelledby="download-and-verify">
+            <h2 id="download-and-verify">Download &amp; verify</h2>
+            <ol>
+              <li>
+                Use the <a href="/">download page</a> or
+                <a
+                  href="https://github.com/quilnode/quilnode/releases"
+                  rel="noreferrer"
+                  >quilnode/quilnode Releases</a
+                >. Read that release's compatibility notes and known issues.
+                “Available soon” means there is no matching published installer;
+                do not substitute a rehearsal build or a file from chat.
+              </li>
+              <li>
+                Download the <code>.dmg</code> and <code>SHA256SUMS</code> from
+                the same release. Keep the original filenames. Compare the DMG's
+                SHA-256 with its exact entry in the checksum file.
+              </li>
+            </ol>
+            <pre
+              tabindex="0"
+              aria-label="Compute the downloaded DMG checksum"
+            ><code>shasum -a 256 "/path/to/the-downloaded-file.dmg"</code></pre>
+            <p>
+              Replace the quoted path with your downloaded file. This command
+              only reads the file. A mismatch means
+              <strong>stop; do not open it</strong>. Matching a checksum
+              downloaded alongside a file detects mismatched bytes, but does not
+              independently authenticate the publisher.
+            </p>
+            <details>
+              <summary>Full signature and package verification</summary>
+              <p>
+                Technical reviewers can use the verifier from the reviewed
+                source at the release's exact signed tag. Download every
+                attached release asset into one otherwise empty directory; do
+                not include GitHub's automatically generated source archives.
+                From that source checkout, run:
+              </p>
+              <pre
+                tabindex="0"
+                aria-label="Verify a complete release package"
+              ><code>scripts/release/verify-release.sh "/path/to/release-assets"</code></pre>
+              <p>
+                The verifier uses the checked-in public keys to authenticate the
+                signed report, feed, and DMG before mounting it read-only, then
+                checks the delivered app and inventory. It needs the verifier's
+                development tools, including Swift and Python 3; it does not
+                need private keys and does not install the app. Review the
+                source and trust anchors first. Do not add
+                <code>--rehearsal</code> when verifying a public release.
+              </p>
+            </details>
+          </section>
+
+          <section class="guide-section" aria-labelledby="first-open">
+            <h2 id="first-open">Install &amp; first open</h2>
+            <ol>
+              <li>Open the verified DMG in Finder.</li>
+              <li>
+                Drag <strong>QuilNode</strong> onto the
+                <strong>Applications</strong> folder link. Wait for the copy to
+                finish, then eject the DMG.
+              </li>
+              <li>
+                Open <strong>QuilNode from Applications</strong>, not from the
+                mounted installer. The local service expects the installed app
+                at <code>/Applications/QuilNode.app</code>.
+              </li>
+            </ol>
+            <h3>When macOS blocks an unknown developer</h3>
+            <p>
+              Community-signed builds use the project's signing certificate.
+              They are not Apple Developer ID signed or Apple-notarized. A valid
+              project signature does not make the publisher Apple-verified.
+            </p>
+            <p>
+              If you have reviewed the source and release, verified the
+              download, and choose to proceed:
+            </p>
+            <ol>
+              <li>Try opening the installed app once.</li>
+              <li>
+                Open <strong>System Settings → Privacy &amp; Security</strong>.
+                Find the message about QuilNode and choose
+                <strong>Open Anyway</strong>, if macOS offers it.
+              </li>
+              <li>
+                Read the confirmation and authenticate if requested. Return to
+                Applications and open QuilNode.
+              </li>
+            </ol>
+            <p>
+              This is a specific app exception—not a reason to disable
+              Gatekeeper.
+              <strong
+                >Stop if macOS says the app is damaged, contains malware, or
+                will harm your computer.</strong
+              >
+              Do not run blanket quarantine-removal commands. See
+              <a href="https://support.apple.com/en-us/102445" rel="noreferrer"
+                >Apple's first-open guidance</a
+              >; managed Macs may require your administrator's help.
+            </p>
+          </section>
+
+          <section class="guide-section" aria-labelledby="node-setup">
+            <h2 id="node-setup">Set up your node</h2>
+            <h3>A new installation</h3>
+            <ol>
+              <li>
+                Let <strong>QuilNode setup</strong> inspect this Mac. Resolve
+                blocked checks; do not treat “checking” as “offline.”
+              </li>
+              <li>
+                Choose <strong>Acquire signed release</strong>. The app
+                downloads and verifies the official node artifacts before
+                offering installation.
+              </li>
+              <li>
+                Read <strong>Review authorization</strong> and continue to the
+                macOS prompt. The local service creates a restricted runtime
+                account, installs the managed runtime, and configures its
+                startup service and required operating-system limits.
+              </li>
+              <li>
+                Wait for runtime validation. QuilNode installs or reuses a
+                compatible managed <code>qclient</code>; do not install an
+                unrelated copy into the app bundle.
+              </li>
+              <li>
+                Choose an identity, then complete network readiness. A running
+                process is not proof of enrollment or rewards.
+              </li>
+            </ol>
+            <h3>Keep, import, or create an identity</h3>
+            <ul>
+              <li>
+                <strong>Keep detected identity:</strong> retain the existing
+                complete keyset and create managed rollback protection. If
+                QuilNode does not detect an installation you expect, stop and
+                review its location; do not create a replacement identity as a
+                workaround.
+              </li>
+              <li>
+                <strong>Import an existing keyset:</strong> select the folder
+                containing both <code>config.yml</code> and
+                <code>keys.yml</code>. Never mix files from different backups.
+                The local service checks the package and detects its format
+                before activation.
+              </li>
+              <li>
+                <strong>Create a new identity:</strong> generate a new local
+                identity with the verified runtime and client. A new identity
+                does not inherit an old identity's seniority.
+              </li>
+            </ul>
+            <p>
+              For legacy, including pre-.25, packages, keep an untouched copy
+              before migration. Review the detected format and transaction plan.
+              The installed runtime performs the required migration; do not
+              hand-edit private-key fields. A changed network identity does not
+              by itself prove loss of legacy identity continuity, and preserving
+              files does not guarantee a particular chain seniority.
+            </p>
+            <h3>What the password authorizes</h3>
+            <p>
+              The macOS authorization prompt approves a restricted local
+              service; QuilNode does not save your password. Routine authorized
+              controls and signed updates can reuse that trust. Identity
+              creation, import, activation, and recovery export deliberately
+              require fresh approval. Changing the trusted app identity,
+              repairing the service, or enabling a broader development-update
+              policy can require another prompt. There is no promise of “one
+              password forever.”
+            </p>
+            <p>
+              Cancel any unexpected prompt and review the operation first. No
+              part of this setup requires disabling system protections or
+              granting blanket Full Disk Access.
+            </p>
+          </section>
+        </main>
+      </div>
+      <footer class="site-footer">
+        <p>Independent project. Not affiliated with Quilibrium.</p>
+        <a href="https://github.com/quilnode/quilnode/releases" rel="noreferrer"
+          >Release notes <span aria-hidden="true">↗</span></a
+        >
+      </footer>
+    </div>
+  </body>
+</html>

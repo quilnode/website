@@ -14,13 +14,18 @@ export function Site({ release, platform }) {
           <img src="/images/quilnode-mark.svg" width="48" height="48" alt="" />
           <span>QuilNode</span>
         </a>
-        <a
-          className="source-link"
-          href={PROJECT.repositoryURL}
-          rel="noreferrer"
-        >
-          GitHub <FiExternalLink aria-hidden="true" />
-        </a>
+        <nav className="header-links" aria-label="Main navigation">
+          <a className="source-link" href="/guide/">
+            Guide
+          </a>
+          <a
+            className="source-link"
+            href={PROJECT.repositoryURL}
+            rel="noreferrer"
+          >
+            GitHub <FiExternalLink aria-hidden="true" />
+          </a>
+        </nav>
       </header>
       <main id="main" tabIndex="-1">
         <section className="intro" aria-labelledby="page-heading">
@@ -33,6 +38,9 @@ export function Site({ release, platform }) {
             Monitor your node, manage updates, and check diagnostics.
           </p>
           <DownloadAction release={release} platform={platform} />
+          <a className="install-guide-link" href="/guide/#first-open">
+            Installation &amp; safety guide
+          </a>
         </section>
         <AppPreview />
       </main>
