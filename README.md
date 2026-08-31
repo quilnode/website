@@ -47,7 +47,7 @@ Review the returned preview URL before publishing to production:
 npm run check && npm audit && npx vercel deploy --prod
 ```
 
-These are manual uploads from the current working directory, including uncommitted changes. `.vercelignore` allows only the required source folders and build files; unrelated root files, internal Markdown, and credential files are excluded before upload. Vercel installs the lockfile with `npm ci`, runs the same `check` gate, and serves **only `dist/client`**. `vercel.json` supplies security headers and explicitly disables automatic Git deployments. No functions or scheduled jobs are needed.
+These are manual uploads from the current working directory, including uncommitted changes. `.vercelignore` allows only the required source folders and build files; unrelated root files, internal Markdown, and credential files are excluded before upload. Directory allowlist entries have no trailing slash so the CLI can traverse them. Vercel installs the lockfile with `npm ci`, builds the site, runs all regression tests, and serves **only `dist/client`**. Formatting is checked locally before upload, not against Vercel's processed configuration. `vercel.json` supplies security headers and explicitly disables automatic Git deployments. No functions or scheduled jobs are needed.
 
 For `quilnode.com`, add the domain to this project's Vercel settings and apply the exact DNS records Vercel provides. Preserve unrelated mail and verification records. Configure `www.quilnode.com` to redirect to the primary domain if desired. After publishing, verify HTTPS, the response headers, and the download state on the live URL. Keep Vercel build logs and source protection enabled.
 

@@ -13,7 +13,7 @@ test("Vercel deploys only the checked static output, without Git automation", as
   const config = JSON.parse(await read("vercel.json"));
   assert.equal(config.framework, "vite");
   assert.equal(config.installCommand, "npm ci");
-  assert.equal(config.buildCommand, "npm run check");
+  assert.equal(config.buildCommand, "npm run build && npm test");
   assert.equal(config.outputDirectory, "dist/client");
   assert.equal(config.git.deploymentEnabled, false);
   assert.notEqual(config.public, true);
