@@ -1,0 +1,111 @@
+.app-preview {
+  width: min(960px, calc(100% - 96px));
+  margin: 24px auto 0;
+}
+.preview-trigger {
+  display: block;
+  position: relative;
+  padding: 0;
+  width: 100%;
+  border: 1px solid #34404b;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--canvas);
+  cursor: zoom-in;
+}
+.preview-trigger > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1416 / 910;
+}
+.preview-zoom {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: white;
+  background: #081521;
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+.preview-trigger:hover .preview-zoom,
+.preview-trigger:focus-visible .preview-zoom {
+  opacity: 1;
+}
+.preview-dialog {
+  padding: 16px;
+  width: min(1500px, calc(100% - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--canvas);
+  color: var(--text);
+  overscroll-behavior: contain;
+}
+.preview-dialog::backdrop {
+  background: rgb(0 4 9 / 88%);
+}
+.preview-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 16px;
+}
+.preview-dialog h2 {
+  font-size: 16px;
+  font-weight: 500;
+}
+.icon-button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  background: #081521;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.icon-button:hover {
+  background: #102331;
+}
+.icon-button svg {
+  width: 20px;
+  height: 20px;
+}
+.preview-dialog > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.preview-dialog > p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 16px;
+}
+@media (min-width: 1600px) {
+  .app-preview {
+    width: min(1120px, calc(100% - 96px));
+  }
+}
+@media (max-width: 700px) {
+  .app-preview {
+    width: calc(100% - 32px);
+    margin-top: 26px;
+  }
+  .preview-trigger {
+    border-radius: 7px;
+  }
+  .preview-dialog {
+    padding: 12px;
+  }
+}
