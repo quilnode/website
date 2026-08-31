@@ -6,7 +6,7 @@
     <title>Operator guide — QuilNode</title>
     <meta
       name="description"
-      content="Install QuilNode, understand macOS security prompts, and prepare a local Quilibrium node safely."
+      content="Install QuilNode, handle macOS first-open prompts, manage updates, and protect your node identity with tested recovery backups."
     />
     <meta name="theme-color" content="#02070d" />
     <meta name="referrer" content="no-referrer" />
@@ -15,7 +15,7 @@
     <meta property="og:title" content="Operator guide — QuilNode" />
     <meta
       property="og:description"
-      content="Practical installation, authorization, and node setup guidance. Know what each step changes before you approve it."
+      content="Installation, updates, recovery, and security. Know what each step changes before you approve it."
     />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://quilnode.com/guide/" />
@@ -23,7 +23,7 @@
     <meta name="twitter:title" content="Operator guide — QuilNode" />
     <meta
       name="twitter:description"
-      content="Practical installation, authorization, and node setup guidance."
+      content="Practical installation, update, recovery, and security guidance."
     />
     <link rel="stylesheet" href="/src/styles.css" />
     <link rel="stylesheet" href="/src/styles/guide.css" />
@@ -54,6 +54,11 @@
             <li><a href="#download-and-verify">Download &amp; verify</a></li>
             <li><a href="#first-open">Install &amp; first open</a></li>
             <li><a href="#node-setup">Set up your node</a></li>
+            <li><a href="#network">Network readiness</a></li>
+            <li><a href="#updates">App &amp; node updates</a></li>
+            <li><a href="#recovery">Backups &amp; recovery</a></li>
+            <li><a href="#security">Security &amp; privacy</a></li>
+            <li><a href="#troubleshooting">When something fails</a></li>
           </ol>
         </nav>
         <main id="main" class="guide-main" tabindex="-1">
@@ -250,8 +255,10 @@
                 unrelated copy into the app bundle.
               </li>
               <li>
-                Choose an identity, then complete network readiness. A running
-                process is not proof of enrollment or rewards.
+                Choose an identity, make a
+                <a href="#recovery">separate recovery backup</a>, then complete
+                network readiness. A running process is not proof of enrollment
+                or rewards.
               </li>
             </ol>
             <h3>Keep, import, or create an identity</h3>
@@ -299,6 +306,433 @@
               Cancel any unexpected prompt and review the operation first. No
               part of this setup requires disabling system protections or
               granting blanket Full Disk Access.
+            </p>
+          </section>
+
+          <section class="guide-section" aria-labelledby="network">
+            <h2 id="network">Network readiness</h2>
+            <p>
+              Open <strong>Network</strong> and follow its inbound setup. Use
+              the plan generated from your current configuration, not port
+              numbers copied from another operator. Revisit the plan after
+              changing ports, workers, routers, or networks.
+            </p>
+            <ol>
+              <li>
+                <strong>Verify listeners.</strong> Keep the defaults unless you
+                need a custom profile. Use <strong>Check now</strong> to confirm
+                that the installed node owns the expected listeners.
+              </li>
+              <li>
+                <strong>Review the macOS firewall operation.</strong> It can
+                enable the Application Firewall and allow the installed node
+                binary while preserving other rules. This does not configure
+                your router or prove internet reachability.
+              </li>
+              <li>
+                <strong>Configure your router manually.</strong> Use
+                <strong>Copy plan</strong>, reserve the Mac's local address in
+                the router, and forward only the listed node ports and
+                transports to that address. Never expose local RPC, metrics, or
+                management interfaces. Do not use a DMZ or forward every port.
+              </li>
+              <li>
+                <strong>Check inbound evidence.</strong> An outbound peer
+                connection is not proof that peers can initiate a connection to
+                you. “Inbound traffic observed” is useful evidence; no observed
+                traffic yet is not, by itself, proof of a blocked router.
+              </li>
+            </ol>
+            <p>
+              <strong>Open detected gateway page</strong> uses the Mac's current
+              routing information. It is a starting point, not a guarantee that
+              the gateway has a web administration page. VPNs, multiple routers,
+              or carrier-grade NAT can require help from the router vendor or
+              ISP. QuilNode does not need your router password.
+            </p>
+            <p>
+              Keep macOS and router firmware updated. Opening node ports exposes
+              the node software to unsolicited internet traffic; a firewall rule
+              does not make that software vulnerability-free. See the
+              <a
+                href="https://docs.quilibrium.com/docs/run-node/quick-start/"
+                rel="noreferrer"
+                >official node networking guidance</a
+              >
+              for protocol requirements.
+            </p>
+          </section>
+
+          <section class="guide-section" aria-labelledby="updates">
+            <h2 id="updates">App &amp; node updates</h2>
+            <p>
+              <strong>These are two separate update systems.</strong> The
+              <strong>App build</strong> version belongs to QuilNode. The
+              <strong>Installed runtime</strong> version belongs to the
+              Quilibrium node. Changing one does not mean the other changed.
+            </p>
+            <h3>Update the QuilNode app</h3>
+            <ol>
+              <li>
+                Finish or safely cancel any active node build, installation, or
+                identity operation first.
+              </li>
+              <li>
+                Open <strong>Updates → App build → Check app</strong>. Read the
+                offered release notes and approve installation if you want it.
+                The updater verifies the signed feed and update archive before
+                replacing the application.
+              </li>
+              <li>
+                Let QuilNode relaunch, then check the app version and local node
+                status. The node runs as a separate service; an app replacement
+                is not a node restart or a node upgrade.
+              </li>
+            </ol>
+            <p>
+              Automatic app checks do not mean automatic installation: you
+              approve each app replacement. If the feed is unavailable, that is
+              not evidence that you are up to date. You can use a verified DMG
+              from the same project's Releases page and follow
+              <a href="#first-open">the installation steps</a> to replace the
+              app. Do not run two copies or launch it from the DMG. Review any
+              macOS warning; a future update is not guaranteed to be
+              prompt-free.
+            </p>
+            <h3>Choose a node update policy</h3>
+            <p>
+              In <strong>Updates</strong>, use the
+              <strong>Automatic channel</strong> selector and review its
+              confirmation. These policies apply to the node, not QuilNode:
+            </p>
+            <ul>
+              <li>
+                <strong>Manual:</strong> you initiate each node update. Use this
+                if you want to review every change before it runs.
+              </li>
+              <li>
+                <strong>Signed Stable:</strong> automatically follows eligible
+                official signed releases, with digest and signature-quorum
+                verification. This is the most conservative automatic channel,
+                not a guarantee that a release has no bugs.
+              </li>
+              <li>
+                <strong>Approved Dev:</strong> builds the exact upstream commit
+                that changes the <code>subpatch</code> marker. “Approved” means
+                marked for a development build; it is not the signed-release
+                assurance level or a security certification.
+              </li>
+              <li>
+                <strong>Raw Dev:</strong> follows eligible upstream branch heads
+                without requiring the approval marker. Experimental changes can
+                fail to build or break compatibility. Use only if you accept
+                that risk.
+              </li>
+            </ul>
+            <p>
+              Source channels may need the build toolchain. Review the tool
+              setup before authorizing it and allow enough time, memory, and
+              disk space. A compatible, verified <code>qclient</code> is reused;
+              it is acquired or rebuilt when the selected runtime requires it.
+            </p>
+            <h3>What to expect during an update</h3>
+            <p>
+              Preparation downloads or compiles the candidate while the current
+              node stays running. Activation briefly stops it, switches the
+              runtime, starts it again, and checks local health. A prepared
+              candidate is not an installed update: wait for the completion
+              receipt and verify <strong>Installed runtime</strong>.
+            </p>
+            <p>
+              Closing the dashboard leaves the menu-bar app running. Fully
+              quitting QuilNode stops its update scheduler; a build is not a
+              guaranteed background job after Quit. Keep the app open and the
+              Mac awake during an operation. After interruption, reopen Updates
+              and review the recovered receipt rather than starting a second
+              build or assuming completion.
+            </p>
+            <details>
+              <summary>An automatic update has not started</summary>
+              <ol>
+                <li>
+                  Confirm the selected channel, its authorization status, and
+                  the next-check information. Checks are periodic, not an
+                  instant push service; offline periods and upstream failures
+                  can delay them.
+                </li>
+                <li>
+                  If shown, use <strong>Retry automatic setup</strong> to review
+                  and repair authorization. A selected policy alone does not
+                  prove the local service accepted it.
+                </li>
+                <li>
+                  Read the last failure and build output. Automatic retries for
+                  an already failed candidate pause until a new upstream signal
+                  or a manual retry, avoiding repeated failed builds.
+                </li>
+                <li>
+                  Once the cause is addressed, use
+                  <strong>Run selected channel now</strong>, or
+                  <strong>Install staged update</strong> when a verified
+                  candidate is retained. Do not delete caches or stores merely
+                  because an update is waiting.
+                </li>
+              </ol>
+            </details>
+          </section>
+
+          <section class="guide-section" aria-labelledby="recovery">
+            <h2 id="recovery">Backups &amp; recovery</h2>
+            <p>
+              A node identity package is the matching
+              <code>config.yml</code> and <code>keys.yml</code> pair. Treat both
+              as secret. An address, peer ID, screenshot, or chain record cannot
+              replace missing private keys.
+            </p>
+            <p>
+              <strong>Automatic rollback</strong> protects a local identity
+              transaction. A <strong>Separate backup</strong> protects against
+              losing this Mac. Runtime rollback in Updates protects the
+              executable switch. None is a substitute for the others, and an
+              identity export is not a full backup of node stores or app data.
+            </p>
+            <h3>Create a separate backup</h3>
+            <ol>
+              <li>
+                Open <strong>Recovery</strong> and confirm the active package.
+                If it is not yet managed, use
+                <strong>Protect identity</strong> first. Then choose
+                <strong>Create backup</strong> or
+                <strong>Create another copy</strong>.
+              </li>
+              <li>
+                Choose a destination on encrypted storage you control, ideally
+                separate from the Mac. Select the mounted encrypted drive or
+                disk image and use <strong>Save Verified Recovery Copy</strong>.
+                Review and approve the macOS authorization prompt.
+              </li>
+              <li>
+                Wait for successful verification. Keep the entire exported
+                folder together: <code>config.yml</code>, <code>keys.yml</code>,
+                and <code>RECOVERY.txt</code>. Follow its recovery notes. Do not
+                paste these files into chat, email, an issue, or an AI tool.
+              </li>
+              <li>
+                Eject encrypted storage when finished and keep the unlock
+                password or recovery material securely and separately. Retain
+                untouched pre-migration copies and make a fresh backup after a
+                successful migration or identity change.
+              </li>
+            </ol>
+            <p>
+              <strong>Verified does not mean encrypted.</strong> QuilNode
+              verifies the exported bytes and restricts local permissions; it
+              does not encrypt the recovery folder. The destination must supply
+              that protection. “Separate backup” records a successful export,
+              not a current check of the media, its encryption, or a successful
+              restore. Test your recovery procedure before relying on it.
+            </p>
+            <details>
+              <summary>
+                Prepare encrypted storage without erasing a disk
+              </summary>
+              <p>
+                Disk Utility can create a new encrypted, read/write disk image
+                for your backup. Use Apple's
+                <a
+                  href="https://support.apple.com/guide/disk-utility/dskutl11888/mac"
+                  rel="noreferrer"
+                  >secure disk image instructions</a
+                >. Select encryption before exporting, mount the image, and
+                choose a folder inside it. An image kept only on this Mac does
+                not protect against losing this Mac; keep an independent copy.
+              </p>
+              <p>
+                You do not need to erase or reformat an existing drive. Never
+                erase storage that contains your only copy. Check that the image
+                can be unlocked and read, and store its password safely: losing
+                that password can make the backup inaccessible. Eject the image
+                when not in use; mounted storage remains accessible to processes
+                with permission to read it.
+              </p>
+            </details>
+            <h3>Restore or switch an identity</h3>
+            <ol>
+              <li>
+                Preserve the existing identity and its independent backup. Stop
+                any other node using the identity you intend to activate; do not
+                run duplicate copies of that identity to test recovery.
+              </li>
+              <li>
+                In <strong>Recovery</strong>, choose
+                <strong>Import identity package</strong> and select the complete
+                backup folder. Review the detected format, public identity
+                metadata, warnings, and transaction plan. Stop if the package is
+                incomplete or not the identity you expected.
+              </li>
+              <li>
+                Review the activation confirmation. For an already stored
+                inactive package, select it and choose
+                <strong>Switch &amp; verify</strong>. The operation needs fresh
+                authorization and a node restart. Do not interrupt it.
+              </li>
+              <li>
+                Wait for validation, then confirm the active identity, node
+                health, and backup coverage. Keep the old package until recovery
+                is verified. Chain enrollment, allocations, and rewards may
+                still need time or protocol progress after local startup.
+              </li>
+            </ol>
+            <p>
+              Rehearse recovery in an isolated environment using a disposable
+              identity. Do not wipe stores to restore keys: stores contain
+              protocol state, not a replacement for your identity backup. A
+              store reset or runtime downgrade can have protocol consequences;
+              review current release guidance and diagnostics first.
+            </p>
+          </section>
+
+          <section class="guide-section" aria-labelledby="security">
+            <h2 id="security">Security &amp; privacy</h2>
+            <p>
+              The graphical app passes selected folder paths and requests to a
+              restricted local service. It does not read, display, copy, or send
+              private-key bytes. The local service and official runtime do
+              access identity material for authorized creation, backup,
+              migration, and activation. Self-custody means those secrets stay
+              under your control; it does not make a compromised Mac safe.
+            </p>
+            <ul>
+              <li>
+                Keep macOS, QuilNode, and the node current. Review changes
+                before widening an update policy or granting a new permission.
+              </li>
+              <li>
+                Do not grant blanket Full Disk Access, disable Gatekeeper, or
+                weaken file permissions to clear an error. Cancel unexpected
+                password prompts and inspect the operation first.
+              </li>
+              <li>
+                Use Privacy Mode around other people and before sharing a view,
+                but inspect the result yourself. It masks classified values; it
+                does not encrypt files, anonymize network traffic, or make
+                clipboard contents and browser destinations private.
+              </li>
+              <li>
+                Never share real keysets, recovery folders, passwords, or
+                signing material. Avoid publishing full node logs, local paths,
+                addresses, and operational identifiers. Use disposable test data
+                for reproductions.
+              </li>
+            </ul>
+            <p>
+              QuilNode has no account, telemetry collector, or remote-command
+              endpoint. Monitoring reads the local node. Release checks and
+              downloads contact external distribution services, which receive
+              normal network request metadata; local-first is not a promise of
+              no internet traffic. Read the
+              <a
+                href="https://github.com/quilnode/quilnode/blob/main/PRIVACY.md"
+                rel="noreferrer"
+                >privacy policy</a
+              >
+              and
+              <a
+                href="https://github.com/quilnode/quilnode/blob/main/SECURITY.md"
+                rel="noreferrer"
+                >security policy</a
+              >
+              for the boundaries and reporting procedure.
+            </p>
+          </section>
+
+          <section class="guide-section" aria-labelledby="troubleshooting">
+            <h2 id="troubleshooting">When something fails</h2>
+            <p>
+              Start with <strong>Diagnostics</strong>, read the evidence and
+              proposed action, and approve only the scoped repair you
+              understand. A failed check is not permission to delete stores,
+              replace an identity, or disable a macOS protection.
+            </p>
+            <details>
+              <summary>Frames or rewards are not progressing</summary>
+              <p>
+                Review local process health, archive connectivity, and protocol
+                waiting states before restarting. An upstream archive or
+                protocol delay can require waiting rather than a local repair.
+                Healthy workers, active allocations, and observed proving do not
+                by themselves prove credited rewards. Check the separate reward
+                evidence and its freshness.
+              </p>
+            </details>
+            <details>
+              <summary>An update failed or stopped partway through</summary>
+              <p>
+                Open Updates and expand the build output or recovered receipt.
+                Identify the failed step and whether activation started. An
+                error during preparation does not mean the running binary was
+                replaced. After an activation error, verify the actual running
+                version and rollback outcome before retrying. A retained
+                candidate can be installed only when the app offers that action.
+                Do not treat a commit count or completed download as proof of a
+                successful installation.
+              </p>
+            </details>
+            <details>
+              <summary>A backup folder reports permission denied</summary>
+              <p>
+                Protected managed folders are not intended for direct editing,
+                even by an administrator. Export a separate copy through
+                Recovery instead of changing ownership or making files
+                world-readable. If export fails, preserve the original package
+                and review the error; do not delete it or paste its contents
+                into a support request.
+              </p>
+            </details>
+            <details>
+              <summary>
+                I closed or removed the app, but the node is still running
+              </summary>
+              <p>
+                The background node service is independent of the dashboard.
+                Closing its window, quitting QuilNode, or deleting the app does
+                not uninstall or stop that service. Use the app's node Stop
+                control and verify the stopped state if you intend to halt it.
+                Preserve and verify independent backups before removing any
+                installation data; do not delete managed system folders by hand.
+              </p>
+            </details>
+            <h3>Report a bug or a security issue</h3>
+            <p>
+              For a non-security bug, open a
+              <a
+                href="https://github.com/quilnode/quilnode/issues"
+                rel="noreferrer"
+                >GitHub issue</a
+              >
+              with the app version, macOS version, reproduction steps, and
+              expected versus actual behavior. Share only a reviewed, sanitized
+              excerpt or disposable reproduction—not full logs or real node
+              configuration.
+            </p>
+            <p>
+              For a suspected vulnerability, use
+              <a
+                href="https://github.com/quilnode/quilnode/security/advisories"
+                rel="noreferrer"
+                >Security → Advisories → Report a vulnerability</a
+              >
+              when the private form is enabled. If it is unavailable, open a
+              contact-only issue titled
+              <strong>Security contact request</strong>
+              asking for a private reporting channel. Include no vulnerability
+              details, logs, screenshots, or attachments in that public request.
+              Never send real private keys, even in a private report. See
+              <a
+                href="https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/report-privately"
+                rel="noreferrer"
+                >GitHub's private-reporting guidance</a
+              >.
             </p>
           </section>
         </main>

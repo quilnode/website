@@ -10,6 +10,7 @@ import { releaseFixture } from "./fixtures.mjs";
 
 let compiler;
 let DownloadAction;
+let Site;
 before(async () => {
   // Compile the actual JSX for markup checks; no browser, listener, or file watcher.
   compiler = await createServer({
@@ -24,6 +25,7 @@ before(async () => {
   ({ DownloadAction } = await compiler.ssrLoadModule(
     "/src/components/DownloadAction.jsx",
   ));
+  ({ Site } = await compiler.ssrLoadModule("/src/components/Site.jsx"));
 });
 after(async () => compiler?.close());
 
@@ -60,4 +62,15 @@ test("download markup exposes only validated links and labels previews", () => {
   );
   assert.equal(incompatible.includes(release.asset.url), false);
   assert.ok(incompatible.includes("disabled"));
+});
+
+test("installation guidance remains reachable even when no download is available", () => {
+  for (const kind of ["loading", "unavailable", "error"]) {
+    const html = renderToStaticMarkup(
+      createElement(Site, { release: { kind }, platform: mac }),
+    );
+    assert.match(html, /<nav[^>]*aria-label="Main navigation"/);
+    assert.match(html, /href="\/guide\/">Guide<\/a>/);
+    assert.match(html, /href="\/guide\/#first-open"/);
+  }
 });

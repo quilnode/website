@@ -4,6 +4,13 @@ import test from "node:test";
 
 const output = new URL("../dist/client/", import.meta.url);
 const guide = () => readFile(new URL("guide/index.html", output), "utf8");
+const sectionText = (html, id) => {
+  const section = new RegExp(
+    `<section[^>]*aria-labelledby="${id}"[^>]*>([\\s\\S]*?)</section>`,
+  ).exec(html)?.[1];
+  assert.ok(section, `Missing guide section: ${id}`);
+  return section.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+};
 
 test("operator guidance ships as readable HTML without JavaScript", async () => {
   const html = await guide();
@@ -92,4 +99,71 @@ test("guide source remains eligible for a manual Vercel upload", async () => {
       `Only static HTML belongs in the guide source: ${entry.name}`,
     );
   }
+});
+
+test("every operator workflow has its own linked, named section", async () => {
+  const html = await guide();
+  for (const id of [
+    "before-you-start",
+    "download-and-verify",
+    "first-open",
+    "node-setup",
+    "network",
+    "updates",
+    "recovery",
+    "security",
+    "troubleshooting",
+  ]) {
+    assert.ok(sectionText(html, id));
+    assert.ok(html.includes(`href="#${id}"`), `Unlinked workflow: ${id}`);
+    assert.match(html, new RegExp(`<h2 id="${id}">`));
+  }
+});
+
+test("update guidance separates app approval, node policies, and interrupted operations", async () => {
+  const text = sectionText(await guide(), "updates");
+  for (const label of ["Manual", "Signed Stable", "Approved Dev", "Raw Dev"]) {
+    assert.ok(
+      text.includes(`${label}:`),
+      `Undocumented update policy: ${label}`,
+    );
+  }
+  assert.match(text, /you approve each app replacement/);
+  assert.match(text, /Fully quitting QuilNode stops its update scheduler/);
+  assert.match(text, /prepared candidate is not an installed update/);
+  assert.match(text, /Retry automatic setup/);
+  assert.match(text, /Install staged update/);
+});
+
+test("recovery guidance requires the complete pair and distinguishes verification from encryption", async () => {
+  const text = sectionText(await guide(), "recovery");
+  for (const file of ["config.yml", "keys.yml", "RECOVERY.txt"]) {
+    assert.ok(text.includes(file), `Missing recovery-package file: ${file}`);
+  }
+  assert.match(text, /Verified does not mean encrypted/);
+  assert.match(text, /does not encrypt the recovery folder/);
+  assert.match(text, /do not run duplicate copies/);
+  assert.match(text, /Do not wipe stores to restore keys/);
+  assert.match(text, /Test your recovery procedure/);
+});
+
+test("security guidance preserves the local-service boundary and contact-only public fallback", async () => {
+  const html = await guide();
+  const security = sectionText(html, "security");
+  assert.match(
+    security,
+    /local service and official runtime do access identity material/,
+  );
+  assert.match(
+    security,
+    /it does not encrypt files, anonymize network traffic/,
+  );
+  const help = sectionText(html, "troubleshooting");
+  assert.match(help, /when the private form is enabled/);
+  assert.match(help, /contact-only issue titled Security contact request/);
+  assert.match(
+    help,
+    /Include no vulnerability details, logs, screenshots, or attachments/,
+  );
+  assert.match(help, /Never send real private keys, even in a private report/);
 });
