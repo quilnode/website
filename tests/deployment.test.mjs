@@ -151,6 +151,7 @@ test("website source contains no internal Markdown or asset symlinks", async () 
     "scripts/",
     "tests/",
     "worker/",
+    "guide/",
   ]) {
     await inspect(new URL(directory, root));
   }
@@ -175,7 +176,15 @@ test("CLI traversal can enter every required source directory", async () => {
         assert.equal(policy.ignores(child), false, `Source excluded: ${child}`);
     }
   }
-  for (const path of ["src", "assets", "public", "scripts", "tests", "worker"])
+  for (const path of [
+    "src",
+    "assets",
+    "public",
+    "scripts",
+    "tests",
+    "worker",
+    "guide",
+  ])
     await inspect(path);
   assert.equal(policy.ignores(".openai"), false);
   assert.equal(policy.ignores(".openai/hosting.json"), false);
@@ -193,8 +202,20 @@ test("CLI source allowlist still excludes private and unrelated files", async ()
     "assets/private.key",
     "public/backup.zip",
     "scripts/internal.md",
+    "guide/internal.md",
+    "guide/private.key",
     "node_modules/package/index.js",
     "dist/client/index.html",
   ])
     assert.equal(policy.ignores(path), true, `Private upload allowed: ${path}`);
+});
+
+test("formatting checks include the operator guide", async () => {
+  const { scripts } = JSON.parse(await read("package.json"));
+  for (const name of ["format", "format:check"]) {
+    assert.ok(
+      scripts[name].split(/\s+/).includes("guide"),
+      `${name} must include the operator guide`,
+    );
+  }
 });

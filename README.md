@@ -1,6 +1,6 @@
 # QuilNode website
 
-The download page for [QuilNode](https://github.com/quilnode/quilnode), a local macOS app for managing a Quilibrium node. This repository contains the website, not the application or its installers.
+The download page and operator guide for [QuilNode](https://github.com/quilnode/quilnode), a local macOS app for managing a Quilibrium node. This repository contains the website, not the application or its installers.
 
 ## Development
 
@@ -73,6 +73,7 @@ src/lib/          Release validation and presentation rules
 src/styles/       Page and preview styles
 assets/           Original brand vectors and icon license
 public/           Privacy-mode app preview and static metadata
+guide/            Static HTML installation and operator guidance
 scripts/          Asset preparation, notices, and build policy
 tests/            Download, platform, publication, and build checks
 worker/           Optional Sites adapter; not deployed to Vercel
