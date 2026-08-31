@@ -138,6 +138,18 @@ test("fetches a designated stable release once without credentials", async () =>
   ]);
 });
 
+test("accepts a designated alpha release while preserving its preview label", async () => {
+  const state = await fetchRelease({
+    fetcher: async () =>
+      Response.json(
+        releaseFixture({ version: "0.1.0-alpha.2", preview: false }),
+      ),
+  });
+  assert.equal(state.kind, "available");
+  assert.equal(state.release.version, "0.1.0-alpha.2");
+  assert.equal(state.release.preview, true);
+});
+
 test("finds preview releases automatically after /latest returns 404", async () => {
   let calls = 0;
   const state = await fetchRelease({

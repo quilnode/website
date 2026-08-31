@@ -107,7 +107,7 @@ export async function fetchRelease({ fetcher = fetch, timeoutMs = 8000 } = {}) {
       if (latest.error) return { kind: "error", reason: latest.error };
       if (!latest.missing) {
         const release = parseRelease(latest.data);
-        return release && !release.preview
+        return release
           ? releaseState(release)
           : { kind: "error", reason: "invalid-response" };
       }
