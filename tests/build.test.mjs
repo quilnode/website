@@ -25,7 +25,7 @@ async function publicFiles(directory) {
 test("published files contain no internal documents, source maps, keys, or workstation paths", async () => {
   const files = await publicFiles(new URL("../dist/client/", import.meta.url));
   const allowed =
-    /^(?:(?:guide\/)?index\.html|robots\.txt|sitemap\.xml|_headers|third-party-notices\.txt|assets\/[A-Za-z0-9_-]+\.(?:js|css|woff2)|images\/[A-Za-z0-9_-]+\.(?:png|svg))$/;
+    /^(?:(?:guide\/)?index\.html|appcast\.xml|robots\.txt|sitemap\.xml|_headers|third-party-notices\.txt|assets\/[A-Za-z0-9_-]+\.(?:js|css|woff2)|images\/[A-Za-z0-9_-]+\.(?:png|svg))$/;
   const privatePath = /\/(?:Users|home)\/[^\s/]+|[A-Z]:\\Users\\[^\s\\]+/;
   const credential =
     /-----BEGIN (?:[A-Z]+ )*PRIVATE KEY-----|\bgh[pousr]_[A-Za-z0-9]{36,}\b|\bgithub_pat_[A-Za-z0-9_]{40,}\b/;
@@ -48,6 +48,27 @@ test("published files contain no internal documents, source maps, keys, or works
       `Credential signature in ${name}`,
     );
   }
+});
+
+test("the signed application feed is deployed byte-for-byte", async () => {
+  const source = await readFile(
+    new URL("../public/appcast.xml", import.meta.url),
+  );
+  const deployed = await readFile(
+    new URL("../dist/client/appcast.xml", import.meta.url),
+  );
+  assert.deepEqual(deployed, source);
+  assert.ok(source.length > 0 && source.length < 64 * 1024);
+  const text = source.toString("utf8");
+  assert.match(text, /<!-- sparkle-signatures:/);
+  assert.match(
+    text,
+    /https:\/\/github\.com\/quilnode\/quilnode\/releases\/download\//,
+  );
+  assert.doesNotMatch(
+    text,
+    /<!DOCTYPE|<!ENTITY|<(?:link|enclosure)\b[^>]*http:\/\//i,
+  );
 });
 
 test("production applies a strict policy and contains no test fixtures or developer paths", async () => {
