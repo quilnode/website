@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
+import ignore from "ignore";
 import { contentSecurityPolicy } from "../scripts/security-policy.mjs";
 import { shippedPackages } from "../scripts/third-party-notices.mjs";
 
@@ -98,13 +99,13 @@ test("CLI uploads require an explicit source allowlist", async () => {
   assert.deepEqual(
     allowed.sort(),
     [
-      "!/src/",
-      "!/assets/",
-      "!/public/",
-      "!/scripts/",
-      "!/tests/",
-      "!/worker/",
-      "!/.openai/",
+      "!/src",
+      "!/assets",
+      "!/public",
+      "!/scripts",
+      "!/tests",
+      "!/worker",
+      "!/.openai",
       "!/.openai/hosting.json",
       "!/index.html",
       "!/guide",
@@ -153,4 +154,47 @@ test("website source contains no internal Markdown or asset symlinks", async () 
   ]) {
     await inspect(new URL(directory, root));
   }
+});
+
+test("CLI traversal can enter every required source directory", async () => {
+  const policy = ignore().add(await read(".vercelignore"));
+  async function inspect(path) {
+    // The CLI tests directory names without a trailing slash before descending.
+    // A directory-only negation would prune the tree before its files are seen.
+    assert.equal(
+      policy.ignores(path),
+      false,
+      `Required upload excluded: ${path}`,
+    );
+    for (const entry of await readdir(new URL(`${path}/`, root), {
+      withFileTypes: true,
+    })) {
+      const child = `${path}/${entry.name}`;
+      if (entry.isDirectory()) await inspect(child);
+      else
+        assert.equal(policy.ignores(child), false, `Source excluded: ${child}`);
+    }
+  }
+  for (const path of ["src", "assets", "public", "scripts", "tests", "worker"])
+    await inspect(path);
+  assert.equal(policy.ignores(".openai"), false);
+  assert.equal(policy.ignores(".openai/hosting.json"), false);
+});
+
+test("CLI source allowlist still excludes private and unrelated files", async () => {
+  const policy = ignore().add(await read(".vercelignore"));
+  for (const path of [
+    ".env.local",
+    ".vercel/project.json",
+    ".openai/internal.json",
+    "unrelated/file.txt",
+    "src/.env.local",
+    "src/private.pem",
+    "assets/private.key",
+    "public/backup.zip",
+    "scripts/internal.md",
+    "node_modules/package/index.js",
+    "dist/client/index.html",
+  ])
+    assert.equal(policy.ignores(path), true, `Private upload allowed: ${path}`);
 });

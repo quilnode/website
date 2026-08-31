@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "5.0.4",
+    "ignore": "7.0.8",
     "prettier": "3.9.6",
     "vite": "6.4.3"
   }
