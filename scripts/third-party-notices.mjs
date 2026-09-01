@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 
 // These packages contribute code or fonts to the browser bundle, not just the build.
 export const shippedPackages = [
+  "@vercel/analytics",
   "react",
   "react-dom",
   "scheduler",

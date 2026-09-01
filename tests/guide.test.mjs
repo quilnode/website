@@ -12,14 +12,19 @@ const sectionText = (html, id) => {
   return section.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
 };
 
-test("operator guidance ships as readable HTML without JavaScript", async () => {
+test("operator guidance remains readable HTML with only the analytics module", async () => {
   const html = await guide();
   assert.match(html, /<html lang="en">/);
   assert.equal((html.match(/<h1[\s>]/g) ?? []).length, 1);
   assert.match(html, /<h1>Operator guide<\/h1>/);
   assert.match(html, /Alpha software/);
   assert.match(html, /Content-Security-Policy/);
-  assert.doesNotMatch(html, /<script\b|onclick=|style=|<iframe\b/i);
+  assert.doesNotMatch(html, /onclick=|style=|<iframe\b/i);
+  const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
+  assert.equal(scripts.length, 1);
+  assert.match(scripts[0][1], /\btype="module"/);
+  assert.match(scripts[0][1], /\bsrc="\/assets\/[^"/]+\.js"/);
+  assert.equal(scripts[0][2].trim(), "");
   assert.match(
     html,
     /<summary>Full signature and package verification<\/summary>/,

@@ -79,8 +79,8 @@ tests/            Download, platform, publication, and build checks
 worker/           Optional Sites adapter; not deployed to Vercel
 ```
 
-There are no analytics, cookies, local-storage identifiers, wallet connections, or node API requests. GitHub and the website host receive ordinary network requests. Screenshot assets must use Privacy Mode and contain no operator identities or machine metadata. Export static PNGs in sRGB; the build keeps only essential image and transparency chunks, removing metadata without re-encoding pixels. Tests check both source and deployed PNGs. Browser test fixtures are development-only and are not published.
+The website uses Vercel Web Analytics for anonymized, cookie-free page-view metrics. It sends no custom events and receives no node, wallet, or application data. There are no local-storage identifiers, wallet connections, or node API requests. GitHub and the website host receive ordinary network requests. Screenshot assets must use Privacy Mode and contain no operator identities or machine metadata. Export static PNGs in sRGB; the build keeps only essential image and transparency chunks, removing metadata without re-encoding pixels. Tests check both source and deployed PNGs. Browser test fixtures are development-only and are not published.
 
-The production bundle includes `/third-party-notices.txt` with the required licenses for React, React Icons, Feather, and Inter. Research, internal plans, and audit reports belong outside this repository.
+The production bundle includes `/third-party-notices.txt` with the required licenses for Vercel Analytics, React, React Icons, Feather, and Inter. Research, internal plans, and audit reports belong outside this repository.
 
 QuilNode is an independent project, not affiliated with Quilibrium.
