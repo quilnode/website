@@ -4,17 +4,17 @@ IMPORTANT: This file was signed by Sparkle. Any modifications to this file requi
     <channel>
         <title>QuilNode</title>
         <item>
-            <title>QuilNode 0.1.0-alpha.3</title>
-            <pubDate>Tue, 01 Sep 2026 02:12:44 +0200</pubDate>
+            <title>QuilNode 0.1.0-alpha.4</title>
+            <pubDate>Tue, 01 Sep 2026 22:17:32 +0200</pubDate>
             <link>https://quilnode.com</link>
-            <sparkle:version>113</sparkle:version>
-            <sparkle:shortVersionString>0.1.0-alpha.3</sparkle:shortVersionString>
+            <sparkle:version>114</sparkle:version>
+            <sparkle:shortVersionString>0.1.0-alpha.4</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <enclosure url="https://github.com/quilnode/quilnode/releases/download/v0.1.0-alpha.3/QuilNode-0.1.0-alpha.3.dmg" length="15405124" type="application/octet-stream" sparkle:edSignature="A0rfZ0gHRD0ubrwVNKJpmGgd+kpmazL29UD4wJd3uyLkLqnoSsoOlHBj0sNdn3QA0mGG+ZFa/8XBVgtL+fU8AA=="></enclosure>
+            <enclosure url="https://github.com/quilnode/quilnode/releases/download/v0.1.0-alpha.4/QuilNode-0.1.0-alpha.4.dmg" length="15764108" type="application/octet-stream" sparkle:edSignature="5/znuulLU2lL+hj8pJ4sRMMhjlswtFdwZoGsL5AFXd0FzgfJ7mCYvPU+uovHTxmi3lUMvAPvwbbzhBGzq56ECQ=="></enclosure>
         </item>
     </channel>
 </rss><!-- sparkle-signatures:
-edSignature: +fYfuCfI8ZL/JbYqMjL/EyNdOPmFSwZvqrR21MTDwNBP9AxeBhZXQQSJp4jDE3Oc8wEMePVxFrDD8rLFq5e1Dg==
+edSignature: 8zx0PlCJ3lqMic7bCfB7+fa6BpYj+92AEGur6mkuNH8ylgioVSBivaTGlI8QnWsEifujtbR1k0jEc/uo6i6GBA==
 length: 1227
 -->
