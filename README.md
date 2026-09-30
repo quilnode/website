@@ -64,6 +64,8 @@ Platform hints are advisory. Unsupported platforms receive a compatibility expla
 
 The site validates download locations, not DMG signatures. Checksums, signatures, installation instructions, and notarization details belong with the application release.
 
+The application's signed update feed is a separate publication step: `/appcast.xml` is served from `public/appcast.xml`. Automatic installer discovery does not change that file. Publish and re-download/verify every GitHub release asset first, then replace the feed with the byte-identical signed `appcast.xml` from that verified release and deploy manually to Vercel. Never edit or reformat the signed XML. Confirm the live feed's SHA-256 matches the release asset; this feed switch exposes the new application update.
+
 ## Structure and privacy
 
 ```text
